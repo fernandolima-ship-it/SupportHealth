@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Clinic | Support Health</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-heading { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        /* Estilos do velocímetro semi-circular responsivo */
+        .gauge-wrap {
+            position: relative;
+            width: 180px;
+            height: 90px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .gauge-bg {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 14px solid #e2e8f0;
+            box-sizing: border-box;
+        }
+        .gauge-fill {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 14px solid transparent;
+            box-sizing: border-box;
+            border-left-color: #ef4444; /* Vermelho para alterado */
+            border-top-color: #f59e0b;  /* Amarelo */
+            transform: rotate(-45deg);
+        }
+
+        /* Ocultar barra de scroll padrão mantendo a funcionalidade de arrastar com o dedo */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-700 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- Header -->
+    <header class="border-b border-slate-100 sticky top-0 bg-white/90 backdrop-blur-md z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl font-extrabold text-slate-900 tracking-tight font-heading">Support<span class="text-[#0252fd]">Health</span></span>
+            </div>
+            
+            <!-- Menu de navegação para Desktop -->
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-slate-500">
+                <a href="#protocolos" class="hover:text-slate-900 transition">Biblioteca de Injetáveis</a>
+                <a href="#suportal-ia" class="hover:text-slate-900 transition">Inteligência Artificial</a>
+                <a href="#gestao" class="hover:text-slate-900 transition">Gestão</a>
+                <a href="#especialista" class="hover:text-slate-900 transition">Falar com Especialista</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex bg-[#0252fd] hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold transition text-sm shadow-lg shadow-blue-600/20 items-center gap-2 min-h-[44px]">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Agendar Demonstração
+                </a>
+                
+                <!-- Botão Hamburger para telemóveis -->
+                <button id="menu-btn" class="inline-flex md:hidden p-3 rounded-xl hover:bg-slate-50 text-slate-700 focus:outline-none min-w-[44px] min-h-[44px] items-center justify-center" aria-label="Abrir Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Lateral Deslizante para Telemóveis -->
+        <div id="mobile-menu" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden transition-opacity duration-300 opacity-0">
+            <div class="fixed right-0 top-0 bottom-0 w-4/5 max-w-sm bg-white p-6 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300">
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <span class="text-xl font-extrabold text-slate-900 font-heading">Support<span class="text-[#0252fd]">Health</span></span>
+                        <button id="close-menu-btn" class="p-2 rounded-lg hover:bg-slate-50 text-slate-500 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Fechar Menu">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                    <nav class="flex flex-col space-y-4">
+                        <a href="#protocolos" class="mobile-nav-link text-base font-semibold text-slate-600 hover:text-[#0252fd] p-3 rounded-xl hover:bg-slate-50 transition block">Biblioteca de Injetáveis</a>
+                        <a href="#suportal-ia" class="mobile-nav-link text-base font-semibold text-slate-600 hover:text-[#0252fd] p-3 rounded-xl hover:bg-slate-50 transition block">Inteligência Artificial</a>
+                        <a href="#gestao" class="mobile-nav-link text-base font-semibold text-slate-600 hover:text-[#0252fd] p-3 rounded-xl hover:bg-slate-50 transition block">Gestão</a>
+                        <a href="#especialista" class="mobile-nav-link text-base font-semibold text-slate-600 hover:text-[#0252fd] p-3 rounded-xl hover:bg-slate-50 transition block">Falar com Especialista</a>
+                    </nav>
+                </div>
+                <div class="pt-6 border-t border-slate-100">
+                    <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="w-full bg-[#0252fd] hover:bg-blue-700 text-white px-6 py-4 rounded-xl font-bold transition text-center flex items-center justify-center gap-2 min-h-[48px]">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Agendar Demonstração
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-10 sm:pt-20 pb-16 overflow-hidden bg-gradient-to-b from-blue-50/50 to-white">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-blue-600/5 rounded-full blur-[140px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-blue-600 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider mb-8 max-w-full text-left">
+                <i class="fa-solid fa-sparkles mr-1.5 animate-pulse shrink-0"></i> 
+                <span class="truncate">Inteligência Artificial + Registo Clínico</span>
+            </div>
+            
+            <h1 class="text-3xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-4xl mx-auto font-heading px-2">
+                Feito para médicos que <span class="text-[#0252fd]">transformam vidas</span>.
+            </h1>
+            
+            <p class="mt-6 text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed px-4">
+                Organize a sua rotina com o software de gestão e registo clínico eletrónico especializado. Otimize até 40% do seu tempo operacional para focar no que realmente importa: o seu paciente.
+            </p>
+
+            <div class="mt-8 px-4">
+                <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex bg-[#0252fd] hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold transition shadow-xl shadow-blue-600/30 text-center items-center justify-center min-h-[48px]">
+                    Agende uma demonstração personalizada
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1️⃣ SEÇÃO PRINCIPAL: Maior Biblioteca de Injetáveis e Montagem de Protocolos -->
+    <section id="protocolos" class="py-12 sm:py-20 bg-white border-t border-slate-100 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            
+            <div class="lg:col-span-5 space-y-6 text-center sm:text-left">
+                <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">A maior do Brasil</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 font-heading leading-tight px-1">
+                    A maior biblioteca de protocolos injetáveis do país
+                </h2>
+                <p class="text-slate-600 text-sm leading-relaxed px-1">
+                    Ganhe acesso instantâneo a **centenas de protocolos prontos**, estruturados detalhadamente com a composição recomendada, insumos necessários e vias de aplicação (intramuscular, endovenosa ou intradérmica).
+                </p>
+                
+                <div class="space-y-4 text-left">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 text-xs">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-hand-pointer text-[10px]"></i></div>
+                            <div>
+                                <strong class="text-slate-900 block font-heading text-sm">Montagem Ágil (Arrastar & Soltar)</strong>
+                                <span class="text-slate-500 leading-relaxed text-xs">Selecione o protocolo injetável ideal para o paciente e jogue-o diretamente na tela de atendimento na hora.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 text-xs">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-calculator text-[10px]"></i></div>
+                            <div>
+                                <strong class="text-slate-900 block font-heading text-sm">Precificação Automática de Ativos</strong>
+                                <span class="text-slate-500 leading-relaxed text-xs">O sistema recalcula a composição, as frações de insumos, a periodicidade e gera o orçamento consolidado transparente instantaneamente.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Moldura de Navegador Premium com a imagem real "protocolos.png" -->
+            <div class="lg:col-span-7 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+                <!-- Barra superior simulando cabeçalho de Browser -->
+                <div class="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center justify-between shrink-0">
+                    <div class="flex space-x-1.5">
+                        <span class="w-3 h-3 rounded-full bg-red-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-400 block"></span>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono w-3/5 text-center truncate">
+                        supportclinic.com.br/protocolos
+                    </div>
+                    <div class="w-8"></div>
+                </div>
+                <!-- Imagem Real carregada a partir do upload -->
+                <div class="relative bg-slate-50 overflow-hidden">
+                    <img src="protocolos.png" alt="Painel de Protocolos Injetáveis Support Clinic" class="w-full h-auto block" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80';">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 2️⃣ SEÇÃO: Inteligência Artificial (Support IA & Support Lab) -->
+    <section id="suportal-ia" class="py-12 sm:py-20 bg-slate-50/50 border-t border-slate-100 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
+            
+            <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+                
+                <!-- Textos Explicativos da IA -->
+                <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24 text-center sm:text-left">
+                    <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">Inteligência Artificial Nativa</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 font-heading leading-tight">
+                        One page, através da sua anamnese a IA poderá auxiliar em todo seu raciocínio clínico
+                    </h2>
+                    <p class="text-sm text-slate-600 leading-relaxed font-semibold">
+                        Diga adeus às digitações cansativas durante as consultas. Nossa IA analisa e transcreve a anamnese automaticamente, gerando sugestão de receitas, exames e dietas de forma instantânea.
+                    </p>
+                    <p class="text-sm text-slate-500 leading-relaxed hidden sm:block">
+                        Experimente interagir com as abas de simulação ao lado para ver como os documentos clínicos são gerados pelo sistema com base no relato do paciente.
+                    </p>
+                    <div class="space-y-4 text-left pt-2">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-microphone"></i></div>
+                            <div>
+                                <strong class="text-slate-900 block text-sm">Captação de Consultas por Áudio</strong>
+                                <span class="text-slate-500 leading-relaxed text-xs">O sistema ouve a interação, organiza as queixas do paciente e preenche os campos correspondentes na anamnese.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-apple-whole"></i></div>
+                            <div>
+                                <strong class="text-slate-900 block text-sm">Criação Instantânea de Dietas</strong>
+                                <span class="text-slate-500 leading-relaxed text-xs">Preencha metas de calorias e preferências e deixe a IA programar a dieta detalhada por refeição em segundos.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Replicando as Abas Interativas (Prontuário, Receitas, Exames e Dieta) -->
+                <div class="lg:col-span-7 bg-[#090f1d] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden text-xs space-y-4 p-3 sm:p-4 text-slate-300">
+                    
+                    <!-- Topbar Roxa/Azul do Support IA -->
+                    <div class="border-b border-slate-800/80 pb-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-2 text-blue-400 font-bold">
+                            <i class="fa-solid fa-sparkles animate-pulse"></i>
+                            <span class="font-heading text-white text-sm">Support IA Workspace</span>
+                        </div>
+                        <i class="fa-solid fa-circle text-emerald-500 text-[10px]"></i>
+                    </div>
+
+                    <!-- Dados do Paciente -->
+                    <div class="p-3 bg-slate-900/40 border border-slate-800/80 rounded-xl flex flex-wrap gap-4 sm:gap-6 text-[11px]">
+                        <div><span class="text-slate-500 block uppercase text-[9px] font-bold">Registo Clínico</span><strong class="text-white">Fernando Lino Da Silva Lima</strong></div>
+                        <div class="flex gap-4">
+                            <div><span class="text-slate-500 block uppercase text-[9px] font-bold">Idade</span><strong class="text-white">28 anos</strong></div>
+                            <div><span class="text-slate-500 block uppercase text-[9px] font-bold">Nascimento</span><strong class="text-white">18/06/1998</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- Abas de Navegação Clínica Interativas com JavaScript (Slide móvel ativo) -->
+                    <div class="flex border-b border-slate-800 bg-slate-900/20 overflow-x-auto text-[11px] font-medium text-slate-400 gap-1 no-scrollbar scroll-smooth">
+                        <button onclick="switchTab('anamnese')" id="tab-anamnese" class="px-4 py-3 border-b-2 border-blue-500 text-white bg-slate-900/60 font-semibold whitespace-nowrap transition-all min-h-[44px]">ANAMNESE</button>
+                        <button onclick="switchTab('prescricao')" id="tab-prescricao" class="px-4 py-3 border-b-2 border-transparent hover:text-white whitespace-nowrap transition-all min-h-[44px]">PRESCRIÇÃO</button>
+                        <button onclick="switchTab('pedidoexames')" id="tab-pedidoexames" class="px-4 py-3 border-b-2 border-transparent hover:text-white whitespace-nowrap transition-all min-h-[44px]">PEDIDO DE EXAMES</button>
+                        <button onclick="switchTab('dieta')" id="tab-dieta" class="px-4 py-3 border-b-2 border-transparent hover:text-white whitespace-nowrap transition-all font-bold text-emerald-400 min-h-[44px]">DIETA</button>
+                    </div>
+
+                    <!-- Conteúdos Dinâmicos -->
+                    <div class="p-4 bg-slate-900/30 border border-slate-800/80 rounded-xl min-h-[220px]">
+                        
+                        <!-- Conteúdo 1: Anamnese (transcrição.png) -->
+                        <div id="content-anamnese" class="tab-content space-y-4">
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-1">Queixa Principal (QP):</strong>
+                                <p class="text-slate-400 text-[11px] leading-relaxed">Paciente relata dor de cabeça persistente durante todo o dia, acompanhada de náusea, sem alívio com medidas habituais.</p>
+                            </div>
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-1">História da Doença Atual (HDA):</strong>
+                                <p class="text-slate-400 text-[11px] leading-relaxed">A cefaleia iniciou-se no mesmo dia da consulta, com intensidade significativa e sem resposta a intervenções caseiras. A dor é contínua e impacta negativamente o bem-estar.</p>
+                            </div>
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-1">História Social (HS):</strong>
+                                <p class="text-slate-400 text-[11px] leading-relaxed">Refere sedentarismo, ausência de prática de exercícios físicos e padrão alimentar inadequado, com consumo frequente de fast-food (McDonald's, Burger King).</p>
+                            </div>
+                        </div>
+
+                        <!-- Conteúdo 2: Prescrição (receita.png) -->
+                        <div id="content-prescricao" class="tab-content hidden space-y-3">
+                            <strong class="text-white block font-heading text-[12px] mb-1">Prescrição Sugerida pela IA:</strong>
+                            <ul class="space-y-2 text-[11px] text-slate-300 leading-relaxed">
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-circle text-[6px] mt-1.5 text-blue-400 shrink-0"></i>
+                                    <span><strong>Paracetamol 500mg</strong> – 1 comprimido a cada 6 horas se necessário para dor de cabeça.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-circle text-[6px] mt-1.5 text-blue-400 shrink-0"></i>
+                                    <span><strong>Dimenidrinato 50mg</strong> – 1 comprimido a cada 8 horas se necessário para náusea.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Conteúdo 3: Pedido de Exames (exames.png) -->
+                        <div id="content-pedidoexames" class="tab-content hidden space-y-4">
+                            <div>
+                                <strong class="text-white block font-heading text-[12px] mb-2">Exames Recomendados:</strong>
+                                <ul class="space-y-1.5 text-[11px] text-slate-300">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> Hemograma completo</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> Glicemia de jejum</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> Perfil lipídico (colesterol total, HDL, LDL, triglicerídeos)</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-blue-400 text-[8px]"></i> TSH e T4 Livre</li>
+                                </ul>
+                            </div>
+                            <div class="pt-3 border-t border-slate-800 text-[10px] text-slate-400 leading-relaxed">
+                                <strong>Orientações:</strong> Jejum de 8 horas obrigatório. <br>
+                                <strong>Justificativa:</strong> Investigação de cefaleia persistente, náusea, dificuldade para emagrecer e histórico de diabetes. Urgência: rotina.
+                            </div>
+                        </div>
+
+                        <!-- Conteúdo 4: Dieta (dietas.png) -->
+                        <div id="content-dieta" class="tab-content hidden space-y-4">
+                            <div>
+                                <strong class="text-white block font-heading text-[13px] mb-1">Dieta de 2.300 kcal — Planejada por IA</strong>
+                                <span class="text-xs text-emerald-400 font-semibold block mb-3">Refeições Estruturadas:</span>
+                            </div>
+                            <div class="space-y-4 text-[11px] leading-relaxed max-h-80 overflow-y-auto no-scrollbar">
+                                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                    <strong class="text-white block mb-1">Refeição 1 - 07:00</strong>
+                                    <ul class="space-y-1 text-slate-400">
+                                        <li>• 3 ovos de galinha cozidos (210 kcal)</li>
+                                        <li>• 40g queijo minas frescal (106 kcal)</li>
+                                        <li>• 100g abacate (96 kcal)</li>
+                                        <li>• 80g fígado bovino grelhado (B12 e ferro) (180 kcal)</li>
+                                    </ul>
+                                    <span class="text-[10px] text-emerald-400 font-bold block mt-2">Total calórico da opção: 594 kcal</span>
+                                </div>
+                                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                    <strong class="text-white block mb-1">Refeição 2 - 10:00</strong>
+                                    <ul class="space-y-1 text-slate-400">
+                                        <li>• 170g iogurte natural integral (104 kcal)</li>
+                                        <li>• 30g castanha-do-pará (197 kcal)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <!-- Barra de Ações Inferior -->
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-slate-500 text-[10px]">
+                        <span>Ações Rápidas de Documentos</span>
+                        <span class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full font-bold">Módulo Ativo</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Moldura de Navegador Premium com a imagem real "Lab.png" -->
+            <div id="suportelab" class="bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+                <!-- Descrição Adicional do Support Lab Exclusivo (Agora no topo da imagem) -->
+                <div class="p-6 border-b border-slate-200 bg-white">
+                    <h3 class="text-lg font-bold text-slate-950 font-heading mb-2">Support Lab</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Revolução na interpretação de exames laboratoriais, desenvolvido para levar agilidade ao atendimento clínico, o Support Lab interpreta exames laboratoriais em segundos utilizando a Inteligência Artificial.
+                    </p>
+                </div>
+                <!-- Barra superior simulando cabeçalho de Browser -->
+                <div class="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center justify-between shrink-0">
+                    <div class="flex space-x-1.5">
+                        <span class="w-3 h-3 rounded-full bg-red-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-400 block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-400 block"></span>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono w-3/5 text-center truncate">
+                        supportclinic.com.br/support-lab
+                    </div>
+                    <div class="w-8"></div>
+                </div>
+                <!-- Imagem Real carregada a partir do upload -->
+                <div class="relative bg-slate-50 overflow-hidden">
+                    <img src="Lab.png" alt="Painel do Leitor de Exames Support Lab" class="w-full h-auto block" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80';">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3️⃣ SEÇÃO: Gestão Integrada e Operação Clínica -->
+    <section id="gestao" class="py-12 sm:py-20 bg-white border-t border-slate-100 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
+                <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">Controle Total e Sem Planilhas</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 font-heading">Gerenciando sua operação de ponta a ponta</h2>
+                <p class="text-slate-500 text-sm">Estruture e automatize os bastidores financeiros, stocks e orçamentos do consultório.</p>
+            </div>
+
+            <!-- Grid de Processos Operacionais -->
+            <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Estoque XML -->
+                <div class="bg-slate-50 border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-lg"><i class="fa-solid fa-file-code"></i></div>
+                    <h3 class="text-lg font-bold text-slate-900 font-heading">Estoque Inteligente via XML</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Importe os ficheiros XML das faturas emitidas pelos seus fornecedores. O sistema realiza as entradas por lotes, distribui as quantidades e as respetivas datas de validade de forma automatizada.
+                    </p>
+                </div>
+                <!-- Fluxo de Enfermagem -->
+                <div class="bg-slate-50 border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-lg"><i class="fa-solid fa-route"></i></div>
+                    <h3 class="text-lg font-bold text-slate-900 font-heading">Baixa Automática na Aplicação</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Assim que um plano de injetáveis é vendido, a ordem de aplicação é enviada para o painel de enfermagem. Ao finalizar o procedimento, o sistema dá baixa imediata nos produtos utilizados no stock.
+                    </p>
+                </div>
+                <!-- Educação Continuada -->
+                <div class="bg-slate-50 border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-lg"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3 class="text-lg font-bold text-slate-900 font-heading">Capacitação Integrada</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        A sua equipa médica e operacional ganha acesso a uma plataforma exclusiva de ensino, reunindo mais de 2.500 horas de palestras científicas e atualizações para resguardar a qualidade técnica.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Caixa de Destaque para Treinamento e Implantação -->
+            <div class="mt-12 bg-gradient-to-r from-slate-50 to-blue-50/30 border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
+                <div class="space-y-2 max-w-2xl text-center lg:text-left">
+                    <h3 class="text-lg font-bold text-slate-900 font-heading flex items-center justify-center lg:justify-start gap-2">
+                        <i class="fa-solid fa-chalkboard-user text-blue-600"></i>
+                        <span>Implantação Conectada com Suporte Online</span>
+                    </h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Treinamos toda a sua equipa (Receção, Financeiro, Médicos e Enfermagem) por videoconferência com acompanhamento personalizado para garantir uma transição suave do seu sistema anterior.
+                    </p>
+                </div>
+                <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="bg-[#0252fd] hover:bg-blue-700 text-white font-bold px-6 py-4 rounded-xl text-xs tracking-wider uppercase whitespace-nowrap transition shadow-lg shadow-blue-600/10 text-center flex items-center justify-center min-h-[48px]">
+                    Saber Mais Sobre Implantação
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção do Especialista (Fernando Lino) -->
+    <section id="especialista" class="py-12 sm:py-24 bg-slate-50 border-t border-slate-100 relative scroll-mt-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 font-sans">
+            <div class="bg-white border border-slate-200 p-6 sm:p-12 rounded-3xl shadow-xl grid md:grid-cols-12 gap-8 items-center">
+                
+                <!-- Informações Profissionais e Foto -->
+                <div class="md:col-span-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 text-center sm:text-left">
+                    <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl overflow-hidden shadow-lg border-4 border-white bg-slate-200 shrink-0">
+                        <img src="IMG_70162.jpg" alt="Fernando Lino" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4 w-full">
+                        <span class="text-[#0252fd] text-xs font-bold uppercase tracking-widest block font-heading">Especialista responsável</span>
+                        <h2 class="text-3xl font-bold text-slate-900 font-heading">Fernando Lino</h2>
+                        
+                        <div class="space-y-3 text-sm text-slate-600">
+                            <p class="flex items-center justify-center sm:justify-start gap-2.5">
+                                <i class="fa-solid fa-briefcase text-blue-600 w-5 shrink-0"></i> 
+                                <span class="text-xs sm:text-sm">Especialista em negócios <strong class="text-slate-900">@grupotgpm</strong></span>
+                            </p>
+                            <p class="flex items-center justify-center sm:justify-start gap-2.5">
+                                <i class="fa-solid fa-microphone-lines text-blue-600 w-5"></i> 
+                                <span>Palestrante <strong class="text-slate-900">@supporthealthbrasil</strong></span>
+                            </p>
+                            <p class="flex items-center justify-center md:justify-start gap-2">
+                                <i class="fa-solid fa-award text-blue-600 w-5 shrink-0"></i> 
+                                <span class="text-xs sm:text-sm">Mais de <strong class="text-slate-900">3.000 clínicas licenciadas</strong> por mim!</span>
+                            </p>
+                            <p class="flex items-center justify-center sm:justify-start gap-2.5">
+                                <i class="fa-brands fa-whatsapp text-green-600 w-5 text-base shrink-0"></i> 
+                                <span class="text-xs sm:text-sm">WhatsApp: <strong class="text-slate-900">+55 31 8919-6026</strong></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ação Direta de WhatsApp -->
+                <div class="md:col-span-4 flex flex-col justify-center items-center bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
+                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white text-3xl shadow-md">
+                        <i class="fa-brands fa-whatsapp animate-bounce"></i>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-xs text-slate-400 font-medium block">Fale Conosco Direto</span>
+                        <span class="text-sm font-bold text-slate-900">+55 31 8919-6026</span>
+                    </div>
+                    <a href="https://wa.me/553189196026?text=Olá%20Fernando,%20gostaria%20de%20agendar%20uma%20demonstração%20personalizada%20do%20sistema." target="_blank" rel="noopener noreferrer" class="w-full text-center bg-[#0252fd] hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold transition text-sm shadow-md shadow-blue-600/10 min-h-[44px] flex items-center justify-center">
+                        Agendar Demonstração
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <span class="text-xl font-extrabold text-white tracking-tight font-heading">Support<span class="text-[#0252fd]">Health</span></span>
+            <p class="text-center sm:text-right max-w-md text-slate-500">Organizando a medicina funcional integrativa no Brasil e tornando-a acessível a todas as pessoas. Grupo TGPM.</p>
+        </div>
+    </footer>
+
+    <!-- Lógica JavaScript das Abas de Prontuário Interativas e Menu Hambúrguer -->
+    <script>
+        // Lógica do Menu Móvel (Hambúrguer)
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+        function toggleMenu() {
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.classList.remove('opacity-0');
+                    mobileMenu.querySelector('div').classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                mobileMenu.classList.add('opacity-0');
+                mobileMenu.querySelector('div').classList.add('translate-x-full');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // Lógica de Abas do Prontuário
+        function switchTab(tabName) {
+            // Esconde todos os conteúdos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove o estilo ativo de todos os botões
+            const buttons = document.querySelectorAll('[id^="tab-"]');
+            buttons.forEach(button => {
+                button.classList.remove('border-blue-500', 'text-white', 'bg-slate-900/60', 'font-semibold');
+                button.classList.add('border-transparent');
+            });
+            
+            // Mostra o conteúdo ativo
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            
+            // Adiciona o estilo ativo no botão clicado
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.remove('border-transparent');
+            activeBtn.classList.add('border-blue-500', 'text-white', 'bg-slate-900/60', 'font-semibold');
+        }
+    </script>
+
+</body>
+</html>
